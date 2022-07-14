@@ -1,22 +1,17 @@
-ESX = exports['es_extended']:getSharedObject()
+local QBCore = exports["qb-core"]:GetCoreObject()
 
-ESX.RegisterServerCallback("Roda_PauseMenu:Getserverdata", function(src, cb)
-    local xPlayer = ESX.GetPlayerFromId(src)
-    if not xPlayer then return end
-    local MaxPlayers = GetConvarInt('sv_maxclients', 32)
-    local TotalPlayers = GetNumPlayerIndices()
-    cb(xPlayer,xPlayer.getMoney(), xPlayer.getAccount('black_money').money, xPlayer.getAccount('bank').money, MaxPlayers, TotalPlayers)
+QBCore.Functions.CreateCallback("Roda_PauseMenu:GetPlayerCount", function(src, cb)
+    cb(GetConvarInt('sv_maxclients', 32), GetNumPlayerIndices())
 end)
 
-ESX.RegisterServerCallback("Roda_PauseMenu:GetOnlineJobs", function(src, cb)
-    local xPlayer = ESX.GetPlayerFromId(src)
-    if not xPlayer then return end
+
+QBCore.Functions.CreateCallback("Roda_PauseMenu:GetOnlineJobs", function(src, cb)
     local jobs = {}
     for k,v in pairs(Config.JobsToShow) do
-        table.insert(jobs, {
-            count = #ESX.GetExtendedPlayers('job', v.job),
+        jobs[#jobs +1] = {
+            count = QBCore.Functions.GetDutyCount(v.job),
             label = v.icon
-        })
+        }
     end
     table.sort(jobs, function(a, b)    return a.count > b.count end)
     cb(jobs)

@@ -1,5 +1,7 @@
 # Roda_PauseMenu
- 
-For support join my discord: https://discord.gg/veDufrHnAn
 
-## This only works in ESX Legacy.
+Converted to qb-core
+
+## Credits
+
+Original Script: https://github.com/RodericAguilar/Roda_PauseMenu

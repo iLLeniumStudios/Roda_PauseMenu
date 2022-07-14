@@ -1,5 +1,8 @@
 
-local ESX = exports["es_extended"]:getSharedObject()
+local QBCore = exports['qb-core']:GetCoreObject()
+
+local PlayerMoney = nil
+local PlayerJob = nil
 
 local open = false
 RegisterCommand('openSetting', function()
@@ -30,20 +33,18 @@ RegisterNUICallback('Getcolor', function(data, cb)
 end)
 
 function GetDataFromServer()
-    ESX.TriggerServerCallback("Roda_PauseMenu:Getserverdata", function(xPlayer, money, dirtymoney, bankmoney, max, total) 
-		local data = xPlayer
-		SendNUIMessage({action = "UpdateData", key = "bankmoney", value = tonumber(bankmoney)})
-		SendNUIMessage({action = "UpdateData", key = "dirtymoney", value = tonumber(dirtymoney)})
-        SendNUIMessage({action = "UpdateData", key = "money", value = tonumber(money)})
-		local job = data.job
-		SendNUIMessage({action = "UpdateData", key = "job", value = job.label.." - "..job.grade_label})
-        SendNUIMessage({action = 'updatePlayers', max = max, total = total})
+    QBCore.Functions.TriggerCallback("Roda_PauseMenu:GetPlayerCount", function(max, current)
+		SendNUIMessage({action = "UpdateData", key = "bank", value = tonumber(PlayerMoney["bank"])})
+		SendNUIMessage({action = "UpdateData", key = "crypto", value = tonumber(PlayerMoney["crypto"])})
+        SendNUIMessage({action = "UpdateData", key = "cash", value = tonumber(PlayerMoney["cash"])})
+		SendNUIMessage({action = "UpdateData", key = "job", value = PlayerJob.label.." - "..PlayerJob.grade.name})
+        SendNUIMessage({action = 'updatePlayers', max = max, total = current})
 	end)
 end
 
 
 function GetJobs()
-    ESX.TriggerServerCallback("Roda_PauseMenu:GetOnlineJobs", function(jobs) 
+    QBCore.Functions.TriggerCallback("Roda_PauseMenu:GetOnlineJobs", function(jobs) 
         for k,v in pairs(jobs) do 
             SendNUIMessage({
                 action = 'updateJobs',
@@ -80,37 +81,32 @@ RegisterNUICallback('SendAction', function(data, cb)
 
 end)
 
+local function LoadPlayerData()
+    local playerData = QBCore.Functions.GetPlayerData()
+    PlayerMoney = playerData.money
+    PlayerJob = playerData.job
+end
 
----- Code for update money and job ----
-
---- Your code ---
-
-
-RegisterNetEvent('esx:setAccountMoney')
-AddEventHandler('esx:setAccountMoney', function(account)
-	if account.name == "bank" then
-		SendNUIMessage({action = "UpdateData", key = "bankmoney", value = tonumber(account.money)})
-		bankmoneys = tonumber(account.money)
-    elseif account.name == "money" then
-        SendNUIMessage({action = "UpdateData", key = "money", value = tonumber(account.money)})
-	elseif account.name == "black_money" then
-		SendNUIMessage({action = "UpdateData", key = "dirtymoney", value = tonumber(account.money)})
-		dirtymoneys = tonumber(account.money)
-	end
+AddEventHandler('onResourceStart', function(resource)
+    if resource == GetCurrentResourceName() then
+        LoadPlayerData()
+    end
 end)
 
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-  	SendNUIMessage({
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    LoadPlayerData()
+end)
+
+RegisterNetEvent('hud:client:OnMoneyChange', function(moneyType)
+    PlayerMoney = QBCore.Functions.GetPlayerData().money
+    SendNUIMessage({action = "UpdateData", key = moneyType, value = tonumber(PlayerMoney[moneyType])})
+end)
+
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
+    PlayerJob = JobInfo
+    SendNUIMessage({
         action = "UpdateData", 
         key = "job", 
-        value = job.label.." - "..job.grade_label
+        value = PlayerJob.label.." - "..PlayerJob.grade.name
     })
-end)
-
--- Maybe 1.1
-
-RegisterNetEvent('es:activateMoney')
-AddEventHandler('es:activateMoney', function(e)
-	SendNUIMessage({action = "UpdateData", key = "money", value = tonumber(e)})
 end)
