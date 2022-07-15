@@ -49,7 +49,8 @@ function GetJobs()
             SendNUIMessage({
                 action = 'updateJobs',
                 label = v.label,
-                value = v.count
+                value = v.count,
+                job = v.job,
             })
         end
 	end)

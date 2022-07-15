@@ -16,7 +16,7 @@ window.addEventListener('message', function (event) {
 
     case 'updateJobs':
       $('.appendJobs').append(`
-            <h1 class="RemoveShit">${v.label} - ${v.value}</h1>
+            <h1 class="RemoveShit">${v.label} ${v.job} : ${v.value}</h1>
           `)
       break;
 

@@ -10,7 +10,8 @@ QBCore.Functions.CreateCallback("Roda_PauseMenu:GetOnlineJobs", function(src, cb
     for k,v in pairs(Config.JobsToShow) do
         jobs[#jobs +1] = {
             count = QBCore.Functions.GetDutyCount(v.job),
-            label = v.icon
+            label = v.icon,
+            job = v.job
         }
     end
     table.sort(jobs, function(a, b)    return a.count > b.count end)
