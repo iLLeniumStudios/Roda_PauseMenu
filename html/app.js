@@ -1,7 +1,3 @@
-window.addEventListener('load', function () {
-  console.log('Roda PauseMenu Started')
-})
-
 window.addEventListener('message', function (event) {
   var v = event.data
 
