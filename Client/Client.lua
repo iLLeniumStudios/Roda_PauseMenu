@@ -71,10 +71,12 @@ end)
 RegisterNUICallback('SendAction', function(data, cb)
     if data.action == 'settings' then 
         DestroyCamera()
+        SetFrontendActive(true)
         ActivateFrontendMenu(GetHashKey('FE_MENU_VERSION_LANDING_MENU'),0,-1) 
         SetNuiFocus(false, false)
     elseif data.action == 'map' then 
         DestroyCamera()
+        SetFrontendActive(true)
         ActivateFrontendMenu(GetHashKey('FE_MENU_VERSION_MP_PAUSE'),0,-1) 
         SetNuiFocus(false, false)
     end
