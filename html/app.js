@@ -8,7 +8,10 @@ window.addEventListener('message', function(event) {
   switch(v.action) {
 
       case 'show':
-          ShowSettings()    
+          ShowSettings()
+          setTimeout(function() {
+            $(document).bind("keyup", escapeHandler);
+          }, 1000);
       break;
 
       case 'UpdateData':
@@ -27,6 +30,11 @@ window.addEventListener('message', function(event) {
   }
 })
 
+function escapeHandler(e) {
+  if (e.key === "Escape") {
+		CloseAll();
+	}
+}
 
 function setValue(key, value){
 	if ($('#'+key+'').text() != value) {
@@ -59,7 +67,7 @@ $(function(){
       $.post('https://Roda_PauseMenu/SendAction', JSON.stringify({action: 'map'}));
       CloseAll()
     })
-    $('#exit').click(function(){
+    $('#resume').click(function(){
       CloseAll()
     })
 
@@ -73,6 +81,7 @@ $(function(){
 })
 
 function CloseAll(){
+  $(document).unbind("keyup", escapeHandler);
   $('.RemoveShit').remove()
   $('.container-fluid').hide(500)
   $.post('https://Roda_PauseMenu/exit', JSON.stringify({}));
