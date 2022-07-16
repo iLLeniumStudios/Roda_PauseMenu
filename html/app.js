@@ -1,3 +1,5 @@
+const resourceName = window.GetParentResourceName();
+
 window.addEventListener('message', function (event) {
   var v = event.data
 
@@ -23,6 +25,10 @@ window.addEventListener('message', function (event) {
     case 'updatePlayers':
       $('.footer h2').text(`Connected Players ${v.total}/${v.max}`)
       break;
+      
+    case 'closeMenu':
+      CloseAll()
+      break;
   }
 })
 
@@ -40,7 +46,15 @@ function setValue(key, value) {
         duration: 2000,
         easing: 'swing',
         step: function (now) {
-          $this.text('$ ' + Math.ceil(now));
+          var prefix = '$ ';
+          if(key=='cash'){
+            prefix = 'Cash: $ ';
+          }else if(key=='bank'){
+            prefix = 'Bank: $ ';
+          }else if(key=='crypto'){
+            prefix = 'Crypto: $ ';
+          }
+          $this.text(prefix + Math.ceil(now));
         }
       });
     } else {
@@ -56,11 +70,11 @@ function ShowSettings() {
 
 $(function () {
   $('#settingsPe').click(function () {
-    $.post('https://Roda_PauseMenu/SendAction', JSON.stringify({ action: 'settings' }));
+    $.post(`https://${resourceName}/SendAction`, JSON.stringify({ action: 'settings' }));
     CloseAll()
   })
   $('#mapita').click(function () {
-    $.post('https://Roda_PauseMenu/SendAction', JSON.stringify({ action: 'map' }));
+    $.post(`https://${resourceName}/SendAction`, JSON.stringify({ action: 'map' }));
     CloseAll()
   })
   $('#resume').click(function () {
@@ -80,5 +94,5 @@ function CloseAll() {
   $(document).unbind("keyup", escapeHandler);
   $('.RemoveShit').remove()
   $('.container-fluid').hide(500)
-  $.post('https://Roda_PauseMenu/exit', JSON.stringify({}));
+  $.post(`https://${resourceName}/exit`, JSON.stringify({}));
 }

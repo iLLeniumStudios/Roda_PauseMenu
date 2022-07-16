@@ -17,3 +17,19 @@ QBCore.Functions.CreateCallback("Roda_PauseMenu:GetOnlineJobs", function(src, cb
     table.sort(jobs, function(a, b)    return a.count > b.count end)
     cb(jobs)
 end)
+
+RegisterNetEvent('hospital:server:SetDeathStatus', function(isDead)
+    local src = source
+	local Player = QBCore.Functions.GetPlayer(src)
+	if Player then
+		TriggerClientEvent('Roda_PauseMenu:CloseMenu', src, isDead)
+	end
+end)
+
+RegisterNetEvent('hospital:server:SetLaststandStatus', function(inlaststand)
+    local src = source
+	local Player = QBCore.Functions.GetPlayer(src)
+	if Player then
+		TriggerClientEvent('Roda_PauseMenu:CloseMenu', src, inlaststand)
+	end
+end)
