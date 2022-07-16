@@ -23,6 +23,10 @@ window.addEventListener('message', function (event) {
     case 'updatePlayers':
       $('.footer h2').text(`Connected Players ${v.total}/${v.max}`)
       break;
+      
+    case 'closeMenu':
+      CloseAll()
+      break;
   }
 })
 
