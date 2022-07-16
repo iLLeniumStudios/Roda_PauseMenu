@@ -11,9 +11,17 @@ end)
 
 RegisterKeyMapping('openSetting', 'Open Settings Menu', 'keyboard', 'ESCAPE')
 
+function CanOpenPauseMenu()
+    Player = QBCore.Functions.GetPlayerData()
+    if Player.metadata["isdead"] or Player.metadata["inlaststand"] then
+        return false
+    else
+        return true
+    end
+end
 
 function OpenPauseMenu()
-    if not open and not IsPauseMenuActive() then 
+    if not open and not IsPauseMenuActive() and CanOpenPauseMenu() then 
         SetNuiFocus(true,true)
         SendNUIMessage({
             action = 'show',
@@ -63,6 +71,20 @@ CreateThread(function()
     end
 end)
 
+CreateThread(function()
+    local sleep = 1000
+    while true do
+        if open then
+            if not CanOpenPauseMenu() then
+                SetNuiFocus(false, false)
+                DestroyCamera()
+            end
+            sleep = 500
+        end
+        Wait(sleep)
+    end
+end)
+
 RegisterNUICallback('exit', function(data, cb)
   SetNuiFocus(false, false)
   open = false
@@ -94,6 +116,10 @@ AddEventHandler('onResourceStart', function(resource)
     end
 end)
 
+AddEventHandler('baseevents:onPlayerDied', function()
+    SendNUIMessage({action = "closeMenu"})
+end)
+
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     LoadPlayerData()
 end)
@@ -110,4 +136,10 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
         key = "job", 
         value = PlayerJob.label.." - "..PlayerJob.grade.name
     })
+end)
+
+RegisterNetEvent('Roda_PauseMenu:CloseMenu', function(close)
+    if close then
+        SendNUIMessage({action = "closeMenu"})
+    end
 end)
