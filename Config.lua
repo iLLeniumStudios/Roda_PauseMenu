@@ -11,3 +11,5 @@ Config.JobsToShow = {
     {job = 'banker', icon = '🏦​'},
     {job = 'barmaid', icon = '🏭​'},
 }
+
+Config.EnableMapHotkey = true -- Enable hotkey to open the map menu? (Legacy for users with playerbase that want to enable quick access to the map)
