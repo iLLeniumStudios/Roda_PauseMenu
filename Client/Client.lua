@@ -11,7 +11,7 @@ end)
 
 RegisterKeyMapping('openSetting', 'Open Settings Menu', 'keyboard', 'ESCAPE')
 
-if Config.EnableHotkey then
+if Config.EnableMapHotkey then
     RegisterCommand('openMap', function()
         if open then
             SendNUIMessage({action = "closeMenu"})
