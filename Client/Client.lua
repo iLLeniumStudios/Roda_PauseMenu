@@ -71,20 +71,6 @@ CreateThread(function()
     end
 end)
 
-CreateThread(function()
-    local sleep = 1000
-    while true do
-        if open then
-            if not CanOpenPauseMenu() then
-                SetNuiFocus(false, false)
-                DestroyCamera()
-            end
-            sleep = 500
-        end
-        Wait(sleep)
-    end
-end)
-
 RegisterNUICallback('exit', function(data, cb)
   SetNuiFocus(false, false)
   open = false
