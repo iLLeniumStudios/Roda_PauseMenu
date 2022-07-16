@@ -9,7 +9,7 @@ RegisterCommand('openSetting', function()
     OpenPauseMenu()
 end)
 
-RegisterKeyMapping('openSetting', 'Open Settings Menu', 'keyboard', 'ESCAPE')
+RegisterKeyMapping('openSetting', 'Open Settings Menu', 'keyboard', Config.EscapeMenuKey)
 
 if Config.EnableMapHotkey then
     RegisterCommand('openMap', function()
@@ -20,7 +20,7 @@ if Config.EnableMapHotkey then
         SetNuiFocus(false, false)
     end)
 
-    RegisterKeyMapping('openMap', 'Open Map', 'keyboard', 'P')
+    RegisterKeyMapping('openMap', 'Open Map', 'keyboard', Config.MapHotkey)
 end
 
 function CanOpenPauseMenu()
