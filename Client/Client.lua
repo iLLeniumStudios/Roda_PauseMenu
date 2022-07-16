@@ -1,15 +1,25 @@
-
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local PlayerMoney = nil
 local PlayerJob = nil
 
 local open = false
+
 RegisterCommand('openSetting', function()
     OpenPauseMenu()
 end)
 
 RegisterKeyMapping('openSetting', 'Open Settings Menu', 'keyboard', 'ESCAPE')
+
+RegisterCommand('openMap', function()
+    if open then
+        SendNUIMessage({action = "closeMenu"})
+    end
+    ActivateFrontendMenu(GetHashKey('FE_MENU_VERSION_MP_PAUSE'),0,-1)
+    SetNuiFocus(false, false)
+end)
+
+RegisterKeyMapping('openMap', 'Open Map', 'keyboard', 'P')
 
 function CanOpenPauseMenu()
     Player = QBCore.Functions.GetPlayerData()
