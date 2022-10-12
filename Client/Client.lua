@@ -39,7 +39,6 @@ function OpenPauseMenu()
             action = 'show',
         })
         open = true
-        CreationCamHead()
         GetDataFromServer()
         GetJobs()
     end
